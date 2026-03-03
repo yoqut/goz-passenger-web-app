@@ -1,0 +1,16 @@
+export const RoutePaths = {
+  HOME: "/",
+  PROFILE: "/profile",
+  ORDER: "/order",
+  ORDER_DETAILS: "/order/:id",
+  CHAT: "/chat",
+  CHAT_USER: "/chat/:id",
+  AUTH: "/auth",
+  NOTIFICATION: "/notification",
+  LOGIN: "/auth/login",
+  ONBOARDING: "/auth/onboarding",
+  NOT_FOUND: "/not-found",
+  EDIT_PROFILE: "/profile/edit",
+  ERROR: "/auth/error",
+  LOADING: "/loading",
+} as const;

@@ -1,0 +1,42 @@
+import { cx } from "@/shared/lib/utils/cx";
+import {
+  Tooltip as AriaTooltip,
+  TooltipTrigger as AriaTooltipTrigger,
+} from "@/shared/ui/tooltip/tooltip";
+import { Plus } from "@untitledui/icons";
+import type { ButtonProps as AriaButtonProperties } from "react-aria-components";
+
+const sizes = {
+  xs: { root: "size-6", icon: "size-4" },
+  sm: { root: "size-8", icon: "size-4" },
+  md: { root: "size-10", icon: "size-5" },
+};
+
+interface AvatarAddButtonProperties extends AriaButtonProperties {
+  size: "xs" | "sm" | "md";
+  title?: string;
+  className?: string;
+}
+
+export const AvatarAddButton = ({
+  size,
+  className,
+  title = "Add user",
+  ...properties
+}: AvatarAddButtonProperties) => (
+  <AriaTooltip title={title}>
+    <AriaTooltipTrigger
+      {...properties}
+      aria-label={title}
+      className={cx(
+        "flex cursor-pointer items-center justify-center rounded-full border border-dashed border-primary bg-primary text-fg-quaternary outline-focus-ring transition duration-100 ease-linear hover:bg-primary_hover hover:text-fg-quaternary_hover focus-visible:outline-2 focus-visible:outline-offset-2 disabled:border-gray-200 disabled:bg-secondary disabled:text-gray-200",
+        sizes[size].root,
+        className,
+      )}
+    >
+      <Plus
+        className={cx("text-current transition-inherit-all", sizes[size].icon)}
+      />
+    </AriaTooltipTrigger>
+  </AriaTooltip>
+);

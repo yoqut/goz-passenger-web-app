@@ -1,0 +1,19 @@
+.onboarding {
+  background-image: url("../../../app/assets/images/onboarding-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 10% 1%;
+}
+.phone_image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    180deg,
+    rgb(34 153 213) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );  
+}

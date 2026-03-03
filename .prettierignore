@@ -1,0 +1,28 @@
+# Ignore build output
+.next
+dist
+build
+out
+
+# Ignore dependencies
+node_modules
+
+# Ignore lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Ignore config and environment files
+.env
+.env.*  
+
+# Ignore generated files
+*.min.js
+coverage
+
+# Ignore JSON and snapshots
+*.snap
+*.json
+
+# Optional: ignore public assets
+public
