@@ -8,7 +8,15 @@ function getTg() {
 
 function isIOS() {
   const ua = navigator.userAgent || "";
-  return /iPad|iPhone|iPod/.test(ua);
+  const iOSUA = /iPad|iPhone|iPod/.test(ua);
+  const iPadOS =
+    navigator.platform === "MacIntel" && (navigator as any).maxTouchPoints > 1;
+  return iOSUA || iPadOS;
+}
+
+function isInTelegram() {
+  const ua = navigator.userAgent || "";
+  return /Telegram/i.test(ua) || !!(window as any).Telegram?.WebApp;
 }
 
 export function InstallCard({ t }: { t: (k: string) => string }) {
@@ -19,6 +27,7 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
 
   const tg = useMemo(() => getTg(), []);
   const ios = useMemo(() => isIOS(), []);
+  const inTg = useMemo(() => isInTelegram(), []);
 
   const hideCard = () => {
     setIsFading(true);
@@ -36,15 +45,14 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
     return () => window.clearTimeout(id);
   }, [visible, homeStatus]);
 
-  const openInSafari = () => {
+  const copyLink = async () => {
     const url = window.location.href;
-
-    if (tg?.openLink) {
-      tg.openLink(url, { try_instant_view: false });
-      return;
+    try {
+      await navigator.clipboard.writeText(url);
+      alert(t("copied") ?? "Link nusxalandi");
+    } catch {
+      prompt(t("copyManually") ?? "Linkni qo‘lda nusxalang:", url);
     }
-
-    window.open(url, "_blank");
   };
 
   const addToHome = () => {
@@ -98,8 +106,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
   if (homeStatus === "unknown") return null;
   if (homeStatus === "added") return null;
 
-  const buttonText = ios ? (t("installation") ?? "O‘rnatish") : t("installation");
-
   return (
     <>
       <div
@@ -112,7 +118,9 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
         <div>
           <p className="font-semibold">{t("installApp")}</p>
           <p className="font-normal text-sm">
-            {ios ? t("iosStep1") : t("fromScreen")}
+            {ios
+              ? t("iosStep1")
+              : t("fromScreen")}
           </p>
         </div>
 
@@ -121,12 +129,12 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
             onClick={addToHome}
             className="bg-blue-500 text-white rounded-xl px-4 py-3 font-semibold text-base hover:bg-blue-600 transition-colors"
           >
-            {buttonText}
+            {t("installation")}
           </button>
 
           <button
             onClick={hideCard}
-            className="rounded-xl px-3 py-3 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
+            className="rounded-xl px-2 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
             aria-label="Close"
           >
             ✕
@@ -134,9 +142,10 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
         </div>
       </div>
 
+      {/* iOS modal */}
       {iosModalOpen && (
         <div
-          className="fixed inset-0 z-10000 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
           onMouseDown={() => setIosModalOpen(false)}
         >
           <div className="absolute inset-0 bg-black/50" />
@@ -149,7 +158,9 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
               <div>
                 <p className="text-lg font-bold">{t("installation")}</p>
                 <p className="text-sm text-slate-600 mt-1">
-                  {t("iosStep1")}
+                  {inTg
+                    ? (t("iosTgHint") ?? "Telegram ichida install bo‘lmaydi. Safari’da ochib qo‘shing.")
+                    : t("iosStep1")}
                 </p>
               </div>
               <button
@@ -173,6 +184,15 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
                 <span className="font-bold">3.</span>
                 <span>{t("iosStep3")}</span>
               </li>
+              {inTg && (
+                <li className="flex gap-2">
+                  <span className="font-bold">※</span>
+                  <span>
+                    {t("iosTgExtra") ??
+                      "Agar Safari ochilmasa: pastdagi (⋯) menyudan “Open in Safari” tanlang."}
+                  </span>
+                </li>
+              )}
             </ol>
 
             <div className="mt-5 flex gap-2 justify-end">
@@ -184,13 +204,10 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
               </button>
 
               <button
-                onClick={() => {
-                  setIosModalOpen(false);
-                  openInSafari();
-                }}
+                onClick={copyLink}
                 className="rounded-xl px-4 py-2 font-semibold bg-blue-500 text-white hover:bg-blue-600 transition"
               >
-                {t("openInSafari") ?? "Safari’da ochish"}
+                {t("copyLink") ?? "Linkni nusxalash"}
               </button>
             </div>
           </div>
