@@ -28,7 +28,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
     }
   };
 
-  // ✅ statusni tekshirish + eventlarni eshitish
   useEffect(() => {
     if (!tg?.onEvent) {
       setHomeStatus("unsupported");
@@ -36,13 +35,10 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
     }
 
     const onChecked = (data: any) => {
-      // Telegram odatda data.status qaytaradi
-      // (masalan: "added" yoki "not_added" yoki "unsupported")
       const st = String(data?.status ?? "unknown") as HomeStatus;
       setHomeStatus(st);
 
       if (st === "added") {
-        // ✅ o‘rnatilgan bo‘lsa ko‘rsatmaymiz
         setVisible(false);
       }
     };
@@ -55,7 +51,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
     tg.onEvent("homeScreenChecked", onChecked);
     tg.onEvent("homeScreenAdded", onAdded);
 
-    // bir marta check qilamiz
     try {
       tg.checkHomeScreenStatus?.();
     } catch {
@@ -68,7 +63,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
     };
   }, [tg]);
 
-  // ✅ unknown bo‘lsa (hali tekshirmagan bo‘lsa) — hozircha ko‘rsatmay turamiz
   if (!visible) return null;
   if (homeStatus === "unknown") return null;
   if (homeStatus === "added") return null;
