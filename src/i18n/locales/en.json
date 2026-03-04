@@ -1,4 +1,11 @@
 {
+   "installApp":"Install the app",
+  "fromScreen":"Open faster from the main screen",
+   "installation":"Installation",
+   "iosStep1": "Open the app in the Safari browser.",
+    "iosStep2": "Tap the \"Share\" button (⬆️) at the bottom of the screen.",
+    "iosStep3": "Select \"Add to Home Screen\".",
+    "iosInstallTitle": "Add the app to the Home Screen",
   "welcome": "Welcome",
   "loading": "Loading...",
   "success": "Success",

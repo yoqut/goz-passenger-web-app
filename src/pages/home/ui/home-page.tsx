@@ -55,6 +55,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import { createOrderSchema } from "../models";
+import { InstallCard } from "@/shared/components/AddScreen";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -528,6 +529,7 @@ const HomePage = () => {
               <span className="absolute right-0 top-.5 size-3 border-2 border-white bg-blue-primary rounded-full" />
             </div> */}
           </div>
+          <InstallCard t={t} />
           {/* <div className="flex items-center gap-x-2 sm:gap-x-4 mt-1">
             <CarIcon className="w-8 h-8 sm:w-10 sm:h-10" />
             <h1 className="text-lg sm:text-[20px] font-semibold">
