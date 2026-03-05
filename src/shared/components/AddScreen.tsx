@@ -163,12 +163,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
                     : t("iosStep1")}
                 </p>
               </div>
-              <button
-                className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
-                onClick={() => setIosModalOpen(false)}
-              >
-                ✕
-              </button>
             </div>
 
             <ol className="mt-4 space-y-2 text-sm">
