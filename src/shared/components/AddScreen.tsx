@@ -118,9 +118,7 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
         <div>
           <p className="font-semibold">{t("installApp")}</p>
           <p className="font-normal text-sm">
-            {ios
-              ? t("iosStep1")
-              : t("fromScreen")}
+            {ios ? t("iosStep1") : t("fromScreen")}
           </p>
         </div>
 
@@ -130,14 +128,6 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
             className="bg-blue-500 text-white rounded-xl px-4 py-3 font-semibold text-base hover:bg-blue-600 transition-colors"
           >
             {t("installation")}
-          </button>
-
-          <button
-            onClick={hideCard}
-            className="rounded-xl px-2 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
-            aria-label="Close"
-          >
-            ✕
           </button>
         </div>
       </div>
@@ -159,10 +149,17 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
                 <p className="text-lg font-bold">{t("installation")}</p>
                 <p className="text-sm text-slate-600 mt-1">
                   {inTg
-                    ? (t("iosTgHint") ?? "Telegram ichida install bo‘lmaydi. Safari’da ochib qo‘shing.")
+                    ? (t("iosTgHint") ??
+                      "Telegram ichida install bo‘lmaydi. Safari’da ochib qo‘shing.")
                     : t("iosStep1")}
                 </p>
               </div>
+              <button
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
+                onClick={() => setIosModalOpen(false)}
+              >
+                ✕
+              </button>
             </div>
 
             <ol className="mt-4 space-y-2 text-sm">
