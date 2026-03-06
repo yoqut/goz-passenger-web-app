@@ -14,15 +14,12 @@ function isIOS() {
   return iOSUA || iPadOS;
 }
 
-
-
 export function InstallCard({ t }: { t: (k: string) => string }) {
   const [visible, setVisible] = useState(true);
   const [isFading, setIsFading] = useState(false);
   const [homeStatus, setHomeStatus] = useState<HomeStatus>("unknown");
 
   const tg = useMemo(() => getTg(), []);
-  const ios = useMemo(() => isIOS(), []);
 
   const hideCard = () => {
     setIsFading(true);
@@ -30,29 +27,12 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
   };
 
   useEffect(() => {
-    if (!visible) return;
-    if (homeStatus === "added") return;
-
+    if (!visible || homeStatus === "added") return;
     const id = window.setTimeout(() => {
       if (homeStatus !== "added") hideCard();
     }, 10000);
-
     return () => window.clearTimeout(id);
   }, [visible, homeStatus]);
-
-  const addToHome = () => {
-    if (ios) {
-      return;
-    }
-
-    if (!tg) return;
-
-    if (typeof tg.addToHomeScreen === "function") {
-      tg.addToHomeScreen();
-    } else {
-      alert(t("tgNotSupported") ?? "Telegram versiyasi qo‘llab-quvvatlamaydi");
-    }
-  };
 
   useEffect(() => {
     if (!tg?.onEvent) {
@@ -80,47 +60,52 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
       setHomeStatus("unsupported");
     }
 
+    const iosTimer = window.setTimeout(() => {
+      setHomeStatus((prev) => (prev === "unknown" ? "not_added" : prev));
+    }, 1500);
+
     return () => {
       tg.offEvent?.("homeScreenChecked", onChecked);
       tg.offEvent?.("homeScreenAdded", onAdded);
+      window.clearTimeout(iosTimer);
     };
   }, [tg]);
 
+  const addToHome = () => {
+    if (!tg) return;
+    if (typeof tg.addToHomeScreen === "function") {
+      tg.addToHomeScreen();
+    } else {
+      alert(t("tgNotSupported") ?? "Telegram versiyasi qo'llab-quvvatlamaydi");
+    }
+  };
+
   if (!visible) return null;
-  if (homeStatus === "unknown") return null;
   if (homeStatus === "added") return null;
+  if (homeStatus === "unknown") return null;
 
   return (
-    <>
-      <div
-        className={[
-          "bg-white flex justify-between items-center rounded-xl shadow-xl w-full mb-4 py-4 px-5",
-          "transition-all duration-500 ease-in-out",
-          isFading ? "opacity-0 translate-y-2 scale-95" : "opacity-100",
-        ].join(" ")}
-      >
-        <div>
-          <p className="font-semibold">{t("installApp")}</p>
-          <p className="font-normal text-sm">
-            {ios
-              ? t("iosStep1")
-              : t("fromScreen")}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={addToHome}
-            className="bg-blue-500 text-white rounded-xl px-4 py-3 font-semibold text-base hover:bg-blue-600 transition-colors"
-          >
-            {t("installation")}
-          </button>
-
-
-        </div>
+    <div
+      className={[
+        "bg-white flex justify-between items-center rounded-xl shadow-xl w-full mb-4 py-4 px-5",
+        "transition-all duration-500 ease-in-out",
+        isFading ? "opacity-0 translate-y-2 scale-95" : "opacity-100",
+      ].join(" ")}
+    >
+      <div>
+        <p className="font-semibold">{t("installApp")}</p>
+        <p className="font-normal text-sm">{t("fromScreen")}</p>
       </div>
 
+      <div className="flex items-center gap-2">
+        <button
+          onClick={addToHome}
+          className="bg-blue-500 text-white rounded-xl px-4 py-3 font-semibold text-base hover:bg-blue-600 transition-colors"
+        >
+          {t("installation")}
+        </button>
 
-    </>
+      </div>
+    </div>
   );
 }
