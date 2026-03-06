@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type HomeStatus = "unknown" | "unsupported" | "not_added" | "added" | string;
+type HomeStatus = "unknown" | "unsupported" | "missed" | "added" | string;
 
 function isIOS() {
   const ua = navigator.userAgent || "";
@@ -37,7 +37,7 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
       if (!tg) {
         if (mounted) {
           setTgReady(false);
-          setHomeStatus((prev) => (prev === "unknown" ? "not_added" : prev));
+          setHomeStatus((prev) => (prev === "unknown" ? "missed" : prev));
         }
         return;
       }
@@ -51,7 +51,7 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
         if (st === "added") {
           setVisible(false);
         } else if (ios && st === "unknown") {
-          setHomeStatus("not_added");
+          setHomeStatus("missed");
         }
       };
 
@@ -66,12 +66,12 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
       try {
         tg.checkHomeScreenStatus?.();
       } catch {
-        setHomeStatus("not_added");
+        setHomeStatus("missed");
       }
 
       const fallbackId = window.setTimeout(() => {
         setHomeStatus((prev) =>
-          prev === "unknown" || prev === "unsupported" ? "not_added" : prev,
+          prev === "unknown" || prev === "unsupported" ? "missed" : prev,
         );
       }, 1200);
 
