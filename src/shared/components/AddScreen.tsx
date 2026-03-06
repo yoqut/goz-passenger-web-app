@@ -119,8 +119,7 @@ export function InstallCard({ t }: { t: (k: string) => string }) {
 
   if (!visible) return null;
   if (homeStatus === "added") return null;
-
-
+  if (homeStatus === "unsupported") return null;
   if (!tgReady && homeStatus === "unknown") return null;
 
   return (
