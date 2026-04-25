@@ -1,4 +1,3 @@
-import { useUserStore } from "@/app/store/user";
 import { useCreatePassenger } from "@/entities/user/api/useCreatePassenger";
 import { useGetUserId, useToast } from "@/shared/lib/hooks";
 import { formatPhoneNumber } from "@/shared/lib/utils";
