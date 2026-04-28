@@ -12,6 +12,7 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ["uneradicative-lamont-undistractingly.ngrok-free.dev"],
+    port: 8888,
+    allowedHosts: ["providence-surplus-accommodate-charleston.trycloudflare.com"],
   },
 });
